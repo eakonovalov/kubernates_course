@@ -1,0 +1,70 @@
+https://blog.alexellis.io/kubernetes-in-10-minutes/
+
+1. Fix hosts file
+
+cd /etc
+sudo vim hosts
+
+edit 127.0.1.1       ubuntu -> 127.0.0.1       server1
+press esc :w :q
+
+2. Upgrade and install Docker
+
+sudo apt-get -y update \
+  && sudo apt-get -y upgrade \
+  && sudo apt-get -y dist-upgrade \
+  && sudo apt-get install -qy docker.io
+
+3. Fix user for Docker usage
+
+sudo usermod -a -G docker $USER \
+  && exit
+
+4. Install certificates
+
+cd ~ \
+  && wget http://cert.luxoft.com/Luxoft-Root-CA.crt http://cert.luxoft.com/Luxoft-Issuing-CA-G2.crt \
+  && sudo mkdir /usr/share/ca-certificates/luxoft \
+  && sudo cp Luxoft-Root-CA.crt Luxoft-Issuing-CA-G2.crt /usr/share/ca-certificates/luxoft/ \
+  && sudo dpkg-reconfigure ca-certificates
+
+5. Install Kubernates
+
+sudo apt-get update \
+  && sudo apt-get install -y apt-transport-https \
+  && curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+
+echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" \
+  | sudo tee -a /etc/apt/sources.list.d/kubernetes.list \
+  && sudo apt-get update
+
+sudo apt-get update \
+  && sudo apt-get install -y \
+  kubelet \
+  kubeadm \
+  kubernetes-cni
+
+6. Install Flannel SDN
+
+ifconfig -> IP
+
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=<IP>
+
+cd $HOME \
+  && sudo cp /etc/kubernetes/admin.conf $HOME/ \
+  && sudo chown $(id -u):$(id -g) $HOME/admin.conf \
+  && export KUBECONFIG=$HOME/admin.conf \
+  && echo "export KUBECONFIG=$HOME/admin.conf" | tee -a ~/.bashrc
+
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/k8s-manifests/kube-flannel-rbac.yml
+
+7. Taint the node
+
+kubectl taint nodes --all node-role.kubernetes.io/master-
+
+8. Check Kubernates
+
+kubectl get all --namespace=kube-system
+
+
