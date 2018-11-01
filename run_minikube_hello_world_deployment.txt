@@ -1,0 +1,25 @@
+1. Install GoogleCloud SDK
+
+2. Set gcloud as a Docker credential helper
+
+  $ gcloud auth configure-docker
+
+3. Check Docker can pull the image
+
+  $ docker pull gcr.io/google_containers/echoserver:1.4
+
+4. Run deployment
+
+  $ kubectl run --generator=run-pod/v1 hello-minikube --image=gcr.io/google_containers/echoserver:1.4 --port=8080
+
+5. Check pod is running
+
+  $ kubectl get pods
+
+6. Check hello-minikube is alive
+
+  $ curl $(minikube service hello-minikube --url)
+
+7. Delete pod
+
+  $ kubectl delete pod hello-minikube
