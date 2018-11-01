@@ -1,0 +1,17 @@
+kubectl get pods
+kubectl describe pod <pod_name>
+
+kubectl expose deployment tomcat-deployment --type=NodePort
+
+kubectl port-forward <pod_name> [[LOCAL_PORT]:REMOTE_PORT]
+
+kubectl logs <pod_name>
+kubectl exec -it <pod_name> -- /bin/bash
+
+kubectl label pods <pod_name> <key>=<value>
+
+kubectl run <name> --image=<image> --port=<port>
+kubectl run --generator=run-pod/v1 hazelcast --image=hazelcast/hazelcast --port=5701
+
+https://kubernetes.io/docs/reference/kubectl/overview/
+https://kubernetes.io/docs/reference/kubectl/cheatsheet/

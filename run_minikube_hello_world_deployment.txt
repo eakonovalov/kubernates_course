@@ -16,10 +16,22 @@
 
   $ kubectl get pods
 
-6. Check hello-minikube is alive
+6. Expose service
+
+  $ kubectl expose pod hello-minikube --type=NodePort
+
+7. Check hello-minikube is alive
 
   $ curl $(minikube service hello-minikube --url)
 
-7. Delete pod
+8. Delete pod
 
   $ kubectl delete pod hello-minikube
+
+9. Service still exists
+
+  $ kubectl get services hello-minikube
+
+10. Delete exposed service
+
+  $ kubectl delete service hello-minikube

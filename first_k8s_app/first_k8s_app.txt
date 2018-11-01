@@ -1,0 +1,27 @@
+1. Create deployment
+
+  $ kubectl apply -f ./deployment.yaml
+
+2. Expose service
+
+  $ kubectl expose deployment tomcat-deployment --type=NodePort
+
+3.  Get service URL
+
+  $ minikube service tomcat-deployment --url
+
+4. Check Tomcat is up and running
+
+  $ curl <URL>
+
+5. Delete deployment
+
+  $ kubectl delete deployment tomcat-deployment
+
+6. Service is still exists
+
+  $ kubectl get services tomcat-deployment
+
+7. Delete exposed service
+
+  $ kubectl delete service tomcat-deployment
