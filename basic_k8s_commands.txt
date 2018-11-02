@@ -1,7 +1,11 @@
 kubectl get pods
 kubectl describe pod <pod_name>
 
+kubectl expose deployment <deployment_name> --type=NodePort
 kubectl expose deployment tomcat-deployment --type=NodePort
+
+kubectl expose deployment <deployment_name> --type=LoadBalancer --target-port=<port> --name <service_name>
+kubectl expose deployment tomcat-deployment --type=LoadBalancer --target-port=8080 --name tomcat-load-balancer
 
 kubectl port-forward <pod_name> [[LOCAL_PORT]:REMOTE_PORT]
 
@@ -12,6 +16,20 @@ kubectl label pods <pod_name> <key>=<value>
 
 kubectl run <name> --image=<image> --port=<port>
 kubectl run --generator=run-pod/v1 hazelcast --image=hazelcast/hazelcast --port=5701
+
+kubectl scale --replicas=2 deployment/<deployment_name>
+
+kubectl get deployments
+
+kubectl rollout status deployment <deployment_name>
+kubectl rollout status deployment tomcat-deployment
+
+kubectl set image deployment/<deployment_name> <container_name>=<image>
+kubectl set image deployment/tomcat-deployment tomcat=tomcat:9.0.12
+
+kubectl rollout history deployment/<deployment_name> [--revision=<num>]
+kubectl rollout history deployment/tomcat-deployment
+kubectl rollout history deployment/tomcat-deployment --revision=2
 
 https://kubernetes.io/docs/reference/kubectl/overview/
 https://kubernetes.io/docs/reference/kubectl/cheatsheet/
